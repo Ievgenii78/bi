@@ -19,7 +19,7 @@ x-superset-user: &superset-user root
 x-superset-depends-on: &superset-depends-on
   - db
   - redis
-  - trino
+    # - trino
 x-superset-volumes: &superset-volumes
   # /app/pythonpath_docker will be appended to the PYTHONPATH in the final container
   - ./docker:/app/docker
@@ -62,7 +62,7 @@ services:
     volumes: *superset-volumes
     environment:
       CYPRESS_CONFIG: "${CYPRESS_CONFIG}"
-      SQLALCHEMY_DATABASE_URI: "trino://trino:trino@trino:8081/tpch/sf1"
+      # SQLALCHEMY_DATABASE_URI: "trino://trino:trino@trino:8081/tpch/sf1"
 
   superset-websocket:
     container_name: superset_websocket
@@ -137,7 +137,8 @@ services:
   superset-tests-worker:
     image: *superset-image
     container_name: superset_tests_worker
-    command: ["/app/docker/docker-bootstrap.sh", "worker"]
+    # command: ["/app/docker/docker-bootstrap.sh", "worker"]
+    command: bash -c "pip install trino && /app/docker/docker-bootstrap.sh app-gunicorn"
     env_file: docker/.env
     environment:
       DATABASE_HOST: localhost
@@ -150,11 +151,11 @@ services:
     user: *superset-user
     volumes: *superset-volumes
  
-  trino:
-    image: trinodb/trino
-    container_name: trino
-    ports:
-      - "8081:8081"
+    # trino:
+    # image: trinodb/trino
+    # container_name: trino
+    # ports:
+    # - "8081:8081"
 
 
 volumes:

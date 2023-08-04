@@ -13,3 +13,6 @@
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
+
+# Add sqlalchemy-trino to the local requirements
+sqlalchemy-trino
